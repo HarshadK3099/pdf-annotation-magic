@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Minus, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface PDFViewerProps {
@@ -18,6 +18,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
     if (pdfUrl) {
       // For demo purposes, set a total page count
       setTotalPages(2);
+      setCurrentPage(1);
     }
   }, [pdfUrl]);
 
@@ -41,7 +42,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
     setZoom(prev => Math.max(prev - 10, 50));
   };
 
-  // Demo handler for text selection
+  // Handler for text selection
   const handleTextSelection = () => {
     const selection = window.getSelection();
     if (selection && selection.toString().trim() !== '') {
@@ -134,31 +135,32 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
               height: `${11 * (zoom / 100)}in`,
             }}
           >
-            {/* This is the main PDF content area with sample text for demonstration */}
-            <div className="absolute inset-0 p-8">
-              <img 
-                src="/lovable-uploads/f27e281e-140d-4362-84d9-f91913b1ec10.png" 
-                alt="PDF Preview" 
-                className="w-full h-full object-contain"
-              />
-              
-              {/* Example selectable text overlays for demo */}
-              <div className="absolute left-[20%] top-[20%] cursor-text">
+            {/* Display the PDF using an iframe */}
+            <iframe
+              ref={iframeRef}
+              src={pdfUrl}
+              className="absolute inset-0 w-full h-full"
+              title="PDF Viewer"
+            />
+            
+            {/* For demonstration purposes, overlay some selectable text elements */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute left-[20%] top-[20%] cursor-text pointer-events-auto">
                 <p className="text-base font-bold">Standard Insurance Company</p>
               </div>
-              <div className="absolute left-[30%] top-[30%] cursor-text">
+              <div className="absolute left-[30%] top-[30%] cursor-text pointer-events-auto">
                 <p className="text-sm font-medium">Group Policy No.: TS 05374370-G</p>
               </div>
-              <div className="absolute left-[30%] top-[35%] cursor-text">
+              <div className="absolute left-[30%] top-[35%] cursor-text pointer-events-auto">
                 <p className="text-sm">Policyholder: Oklahoma Public Employees Health & Welfare Plan</p>
               </div>
-              <div className="absolute left-[30%] top-[40%] cursor-text">
+              <div className="absolute left-[30%] top-[40%] cursor-text pointer-events-auto">
                 <p className="text-sm">Effective Date: July 1, 2021</p>
               </div>
-              <div className="absolute left-[20%] top-[50%] cursor-text">
+              <div className="absolute left-[20%] top-[50%] cursor-text pointer-events-auto">
                 <p className="text-sm font-medium">CERTIFICATE AND SUMMARY PLAN DESCRIPTION</p>
               </div>
-              <div className="absolute left-[30%] top-[55%] cursor-text">
+              <div className="absolute left-[30%] top-[55%] cursor-text pointer-events-auto">
                 <p className="text-sm">Group Long Term Disability Insurance</p>
               </div>
             </div>

@@ -14,14 +14,26 @@ const Header: React.FC<HeaderProps> = ({ onPDFUpload, onJSONUpload, onDownloadJS
   
   const handlePDFInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      onPDFUpload(e.target.files[0]);
+      const file = e.target.files[0];
+      // Check if the file is a PDF
+      if (file.type !== 'application/pdf') {
+        toast.error('Please upload a PDF file');
+        return;
+      }
+      onPDFUpload(file);
       toast.success('PDF uploaded successfully');
     }
   };
   
   const handleJSONInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      onJSONUpload(e.target.files[0]);
+      const file = e.target.files[0];
+      // Check if the file is a JSON
+      if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+        toast.error('Please upload a JSON file');
+        return;
+      }
+      onJSONUpload(file);
       toast.success('JSON uploaded successfully');
     }
   };
@@ -44,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ onPDFUpload, onJSONUpload, onDownloadJS
           </Button>
           <input
             type="file"
-            accept=".pdf"
+            accept=".pdf,application/pdf"
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             onChange={handlePDFInputChange}
           />
@@ -60,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({ onPDFUpload, onJSONUpload, onDownloadJS
           </Button>
           <input
             type="file"
-            accept=".json"
+            accept=".json,application/json"
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             onChange={handleJSONInputChange}
           />
