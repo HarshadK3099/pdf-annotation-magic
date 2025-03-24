@@ -28,8 +28,28 @@ const PDFGenerator: React.FC = () => {
     // Simulate PDF generation process
     setTimeout(() => {
       setIsGenerating(false);
-      toast.success('PDF generation completed');
+      
+      // Create a synthetic PDF for download
+      const pdfContent = generateSyntheticPDF();
+      const pdfBlob = new Blob([pdfContent], { type: 'application/pdf' });
+      const url = URL.createObjectURL(pdfBlob);
+      
+      // Create download link
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'generated_document.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast.success('PDF generated and downloaded');
     }, 2000);
+  };
+  
+  // Function to generate a simple PDF document as a string
+  const generateSyntheticPDF = () => {
+    // This is a very simple PDF structure
+    return '%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj 2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj 3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Resources<<>>/Contents 4 0 R/Parent 2 0 R>>endobj 4 0 obj<</Length 22>>stream\nBT /F1 12 Tf 100 700 Td (Generated PDF from CSV data) Tj ET\nendstream\nendobj\nxref\n0 5\n0000000000 65535 f\n0000000010 00000 n\n0000000053 00000 n\n0000000102 00000 n\n0000000199 00000 n\ntrailer<</Size 5/Root 1 0 R>>\nstartxref\n271\n%%EOF';
   };
   
   return (

@@ -142,28 +142,6 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
               className="absolute inset-0 w-full h-full"
               title="PDF Viewer"
             />
-            
-            {/* For demonstration purposes, overlay some selectable text elements */}
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute left-[20%] top-[20%] cursor-text pointer-events-auto">
-                <p className="text-base font-bold">Standard Insurance Company</p>
-              </div>
-              <div className="absolute left-[30%] top-[30%] cursor-text pointer-events-auto">
-                <p className="text-sm font-medium">Group Policy No.: TS 05374370-G</p>
-              </div>
-              <div className="absolute left-[30%] top-[35%] cursor-text pointer-events-auto">
-                <p className="text-sm">Policyholder: Oklahoma Public Employees Health & Welfare Plan</p>
-              </div>
-              <div className="absolute left-[30%] top-[40%] cursor-text pointer-events-auto">
-                <p className="text-sm">Effective Date: July 1, 2021</p>
-              </div>
-              <div className="absolute left-[20%] top-[50%] cursor-text pointer-events-auto">
-                <p className="text-sm font-medium">CERTIFICATE AND SUMMARY PLAN DESCRIPTION</p>
-              </div>
-              <div className="absolute left-[30%] top-[55%] cursor-text pointer-events-auto">
-                <p className="text-sm">Group Long Term Disability Insurance</p>
-              </div>
-            </div>
           </div>
         )}
       </div>

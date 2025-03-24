@@ -8,15 +8,21 @@ interface HeaderProps {
   onPDFUpload: (file: File) => void;
   onJSONUpload: (file: File) => void;
   onDownloadJSON: () => void;
+  onOpenUploader: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onPDFUpload, onJSONUpload, onDownloadJSON }) => {
+const Header: React.FC<HeaderProps> = ({ 
+  onPDFUpload, 
+  onJSONUpload, 
+  onDownloadJSON,
+  onOpenUploader
+}) => {
   
   const handlePDFInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       // Check if the file is a PDF
-      if (file.type !== 'application/pdf') {
+      if (file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
         toast.error('Please upload a PDF file');
         return;
       }
@@ -46,13 +52,22 @@ const Header: React.FC<HeaderProps> = ({ onPDFUpload, onJSONUpload, onDownloadJS
       </div>
       
       <div className="flex items-center space-x-3">
+        <Button 
+          variant="outline" 
+          className="flex items-center gap-2"
+          onClick={onOpenUploader}
+        >
+          <FileText className="h-4 w-4" />
+          <span>Open PDF Uploader</span>
+        </Button>
+        
         <div className="relative">
           <Button 
             variant="outline" 
             className="flex items-center gap-2"
           >
             <FileText className="h-4 w-4" />
-            <span>Upload PDF</span>
+            <span>Quick Upload PDF</span>
           </Button>
           <input
             type="file"
