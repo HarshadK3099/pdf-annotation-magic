@@ -62,7 +62,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="toolbar sticky top-0 z-10 mb-4 flex justify-between">
+      <div className="toolbar sticky top-0 z-10 mb-4 flex justify-between bg-card/80 backdrop-blur-md rounded-lg p-2 shadow-sm">
         <div className="flex items-center space-x-2">
           <Button 
             variant="outline" 
@@ -123,39 +123,47 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
       </div>
 
       <div 
-        className="document-container flex-1 overflow-auto rounded-lg relative"
+        className="document-container flex-1 overflow-auto rounded-lg relative p-4"
         onMouseUp={handleTextSelection}
       >
-        {/* This would be replaced with a PDF rendering library in a real implementation */}
-        <div 
-          className="pdf-page relative bg-white rounded-lg shadow-lg border border-border/20"
-          style={{ 
-            width: `${6.12 * (zoom / 100)}rem`, 
-            height: `${7.92 * (zoom / 100)}rem`,
-            margin: '2rem auto'
-          }}
-        >
-          {pdfUrl && (
-            <div className="p-6 absolute inset-0">
+        {pdfUrl && (
+          <div 
+            className="pdf-page relative bg-white rounded-lg shadow-lg border border-border/20 mx-auto"
+            style={{ 
+              width: `${8.5 * (zoom / 100)}in`, 
+              height: `${11 * (zoom / 100)}in`,
+            }}
+          >
+            {/* This is the main PDF content area with sample text for demonstration */}
+            <div className="absolute inset-0 p-8">
               <img 
                 src="/lovable-uploads/f27e281e-140d-4362-84d9-f91913b1ec10.png" 
                 alt="PDF Preview" 
-                className="w-full h-auto object-contain opacity-70"
+                className="w-full h-full object-contain"
               />
               
               {/* Example selectable text overlays for demo */}
-              <div className="absolute left-[30%] top-[40%] cursor-text">
+              <div className="absolute left-[20%] top-[20%] cursor-text">
+                <p className="text-base font-bold">Standard Insurance Company</p>
+              </div>
+              <div className="absolute left-[30%] top-[30%] cursor-text">
                 <p className="text-sm font-medium">Group Policy No.: TS 05374370-G</p>
               </div>
-              <div className="absolute left-[30%] top-[45%] cursor-text">
+              <div className="absolute left-[30%] top-[35%] cursor-text">
                 <p className="text-sm">Policyholder: Oklahoma Public Employees Health & Welfare Plan</p>
               </div>
-              <div className="absolute left-[30%] top-[50%] cursor-text">
+              <div className="absolute left-[30%] top-[40%] cursor-text">
                 <p className="text-sm">Effective Date: July 1, 2021</p>
               </div>
+              <div className="absolute left-[20%] top-[50%] cursor-text">
+                <p className="text-sm font-medium">CERTIFICATE AND SUMMARY PLAN DESCRIPTION</p>
+              </div>
+              <div className="absolute left-[30%] top-[55%] cursor-text">
+                <p className="text-sm">Group Long Term Disability Insurance</p>
+              </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
