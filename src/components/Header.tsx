@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { FilePdf, FileJson, Download } from 'lucide-react';
+import { FileText, File, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ onPDFUpload, onJSONUpload, onDownloadJS
             variant="outline" 
             className="flex items-center gap-2"
           >
-            <FilePdf className="h-4 w-4" />
+            <FileText className="h-4 w-4" />
             <span>Upload PDF</span>
           </Button>
           <input
@@ -55,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({ onPDFUpload, onJSONUpload, onDownloadJS
             variant="outline"
             className="flex items-center gap-2"
           >
-            <FileJson className="h-4 w-4" />
+            <File className="h-4 w-4" />
             <span>Upload JSON</span>
           </Button>
           <input
