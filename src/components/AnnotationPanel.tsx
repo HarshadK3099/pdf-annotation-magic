@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Tag, Search, Plus, Trash, Download, Save } from 'lucide-react';
+import { Tag, Search, Plus, Trash, Download, Save, Edit, X, Check } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -14,22 +14,29 @@ interface Annotation {
 interface AnnotationPanelProps {
   selectedText: string;
   annotations: Annotation[];
+  editingAnnotation: string | null;
   onAddAnnotation: (text: string, context: string) => void;
   onDeleteAnnotation: (id: string) => void;
+  onEditAnnotation: (id: string, newContext: string) => void;
   onDownloadJSON: () => void;
   onSaveAnnotations: () => void;
+  setEditingAnnotation: (id: string | null) => void;
 }
 
 const AnnotationPanel: React.FC<AnnotationPanelProps> = ({
   selectedText,
   annotations,
+  editingAnnotation,
   onAddAnnotation,
   onDeleteAnnotation,
+  onEditAnnotation,
   onDownloadJSON,
-  onSaveAnnotations
+  onSaveAnnotations,
+  setEditingAnnotation
 }) => {
   const [contextName, setContextName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [editText, setEditText] = useState('');
 
   const filteredAnnotations = annotations.filter(annotation => 
     annotation.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -55,6 +62,29 @@ const AnnotationPanel: React.FC<AnnotationPanelProps> = ({
     onAddAnnotation(selectedText, contextName);
     setContextName('');
     toast.success('Annotation added');
+  };
+
+  // Start editing an annotation
+  const handleStartEdit = (id: string, currentContext: string) => {
+    setEditingAnnotation(id);
+    setEditText(currentContext);
+  };
+
+  // Handle edit input change
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditText(e.target.value);
+  };
+
+  // Cancel editing
+  const handleCancelEdit = () => {
+    setEditingAnnotation(null);
+    setEditText('');
+  };
+
+  // Save edited annotation name
+  const handleSaveEdit = (id: string) => {
+    onEditAnnotation(id, editText);
+    setEditText('');
   };
 
   return (
@@ -135,7 +165,45 @@ const AnnotationPanel: React.FC<AnnotationPanelProps> = ({
               >
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <p className="text-xs font-medium text-primary mb-1">{annotation.context}</p>
+                    {editingAnnotation === annotation.id ? (
+                      <div className="flex items-center space-x-2 mb-1">
+                        <Input
+                          type="text"
+                          value={editText}
+                          onChange={handleEditChange}
+                          className="text-xs h-7 py-1"
+                          autoFocus
+                        />
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-7 w-7"
+                          onClick={() => handleSaveEdit(annotation.id)}
+                        >
+                          <Check className="h-4 w-4 text-green-500" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-7 w-7"
+                          onClick={handleCancelEdit}
+                        >
+                          <X className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        <p className="text-xs font-medium text-primary mb-1">{annotation.context}</p>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity ml-1"
+                          onClick={() => handleStartEdit(annotation.id, annotation.context)}
+                        >
+                          <Edit className="h-3 w-3 text-muted-foreground" />
+                        </Button>
+                      </div>
+                    )}
                     <p className="text-sm">{annotation.text}</p>
                   </div>
                   <Button 

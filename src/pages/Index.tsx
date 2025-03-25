@@ -9,11 +9,14 @@ const Index = () => {
   const {
     selectedText,
     annotations,
+    editingAnnotation,
     handleTextSelect,
     handleAddAnnotation,
     handleDeleteAnnotation,
+    handleEditAnnotation,
     handleSaveAnnotations,
-    setAnnotations
+    setAnnotations,
+    setEditingAnnotation
   } = useAnnotations();
   
   const {
@@ -43,12 +46,15 @@ const Index = () => {
           pdfUrl={pdfUrl}
           selectedText={selectedText}
           annotations={annotations}
+          editingAnnotation={editingAnnotation}
           onTextSelect={handleTextSelect}
           onAddAnnotation={handleAddAnnotation}
           onDeleteAnnotation={handleDeleteAnnotation}
+          onEditAnnotation={handleEditAnnotation}
           onDownloadJSON={handleDownloadJSON}
           onSaveAnnotations={handleSaveAnnotations}
           onPDFUpload={handlePDFUpload}
+          setEditingAnnotation={setEditingAnnotation}
         />
       </main>
     </div>

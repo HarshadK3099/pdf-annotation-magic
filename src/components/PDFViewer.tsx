@@ -13,6 +13,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
   const [totalPages, setTotalPages] = useState(1);
   const [zoom, setZoom] = useState(100);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     if (pdfUrl) {
@@ -21,6 +22,22 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
       setCurrentPage(1);
     }
   }, [pdfUrl]);
+
+  useEffect(() => {
+    // Set up global listener for text selection
+    const handleGlobalSelection = () => {
+      const selection = window.getSelection();
+      if (selection && selection.toString().trim() !== '') {
+        onTextSelect(selection.toString());
+      }
+    };
+
+    document.addEventListener('mouseup', handleGlobalSelection);
+    
+    return () => {
+      document.removeEventListener('mouseup', handleGlobalSelection);
+    };
+  }, [onTextSelect]);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -40,14 +57,6 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
 
   const handleZoomOut = () => {
     setZoom(prev => Math.max(prev - 10, 50));
-  };
-
-  // Handler for text selection
-  const handleTextSelection = () => {
-    const selection = window.getSelection();
-    if (selection && selection.toString().trim() !== '') {
-      onTextSelect(selection.toString());
-    }
   };
 
   if (!pdfUrl) {
@@ -124,8 +133,8 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
       </div>
 
       <div 
+        ref={containerRef}
         className="document-container flex-1 overflow-auto rounded-lg relative p-4"
-        onMouseUp={handleTextSelection}
       >
         {pdfUrl && (
           <div 

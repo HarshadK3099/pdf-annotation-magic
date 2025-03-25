@@ -13,12 +13,15 @@ interface MainContentProps {
   pdfUrl: string | null;
   selectedText: string;
   annotations: Annotation[];
+  editingAnnotation: string | null;
   onTextSelect: (text: string) => void;
   onAddAnnotation: (text: string, context: string) => void;
   onDeleteAnnotation: (id: string) => void;
+  onEditAnnotation: (id: string, newContext: string) => void;
   onDownloadJSON: () => void;
   onSaveAnnotations: () => void;
   onPDFUpload: (file: File) => void;
+  setEditingAnnotation: (id: string | null) => void;
 }
 
 const MainContent: React.FC<MainContentProps> = ({
@@ -26,12 +29,15 @@ const MainContent: React.FC<MainContentProps> = ({
   pdfUrl,
   selectedText,
   annotations,
+  editingAnnotation,
   onTextSelect,
   onAddAnnotation,
   onDeleteAnnotation,
+  onEditAnnotation,
   onDownloadJSON,
   onSaveAnnotations,
-  onPDFUpload
+  onPDFUpload,
+  setEditingAnnotation
 }) => {
   if (showUploader) {
     return (
@@ -58,10 +64,13 @@ const MainContent: React.FC<MainContentProps> = ({
             <AnnotationPanel 
               selectedText={selectedText}
               annotations={annotations}
+              editingAnnotation={editingAnnotation}
               onAddAnnotation={onAddAnnotation}
               onDeleteAnnotation={onDeleteAnnotation}
+              onEditAnnotation={onEditAnnotation}
               onDownloadJSON={onDownloadJSON}
               onSaveAnnotations={onSaveAnnotations}
+              setEditingAnnotation={setEditingAnnotation}
             />
           </TabsContent>
           

@@ -12,6 +12,7 @@ export interface Annotation {
 export const useAnnotations = () => {
   const [selectedText, setSelectedText] = useState('');
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
+  const [editingAnnotation, setEditingAnnotation] = useState<string | null>(null);
 
   // Handle text selection from PDF
   const handleTextSelect = (text: string) => {
@@ -38,6 +39,26 @@ export const useAnnotations = () => {
     toast.success('Annotation deleted');
   };
 
+  // Handle editing an annotation name
+  const handleEditAnnotation = (id: string, newContext: string) => {
+    if (!newContext.trim()) {
+      toast.error('Annotation name cannot be empty');
+      return;
+    }
+    
+    // Check if the new name already exists in other annotations
+    if (annotations.some(ann => ann.id !== id && ann.context === newContext)) {
+      toast.error('Annotation name already exists');
+      return;
+    }
+    
+    setAnnotations(annotations.map(ann => 
+      ann.id === id ? { ...ann, context: newContext } : ann
+    ));
+    setEditingAnnotation(null);
+    toast.success('Annotation updated');
+  };
+
   // Handle saving annotations
   const handleSaveAnnotations = () => {
     // In a real app, this would send the annotations to the backend
@@ -48,10 +69,13 @@ export const useAnnotations = () => {
   return {
     selectedText,
     annotations,
+    editingAnnotation,
     handleTextSelect,
     handleAddAnnotation,
     handleDeleteAnnotation,
+    handleEditAnnotation,
     handleSaveAnnotations,
-    setAnnotations
+    setAnnotations,
+    setEditingAnnotation
   };
 };
