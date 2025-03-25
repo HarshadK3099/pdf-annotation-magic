@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { FileText, File, Download } from 'lucide-react';
+import { FileText, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
@@ -17,20 +17,6 @@ const Header: React.FC<HeaderProps> = ({
   onDownloadJSON,
   onOpenUploader
 }) => {
-  
-  const handlePDFInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      // Check if the file is a PDF
-      if (file.type !== 'application/pdf' && !file.name.endsWith('.pdf')) {
-        toast.error('Please upload a PDF file');
-        return;
-      }
-      onPDFUpload(file);
-      toast.success('PDF uploaded successfully');
-    }
-  };
-  
   const handleJSONInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -63,26 +49,10 @@ const Header: React.FC<HeaderProps> = ({
         
         <div className="relative">
           <Button 
-            variant="outline" 
-            className="flex items-center gap-2"
-          >
-            <FileText className="h-4 w-4" />
-            <span>Quick Upload PDF</span>
-          </Button>
-          <input
-            type="file"
-            accept=".pdf,application/pdf"
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            onChange={handlePDFInputChange}
-          />
-        </div>
-        
-        <div className="relative">
-          <Button 
             variant="outline"
             className="flex items-center gap-2"
           >
-            <File className="h-4 w-4" />
+            <FileText className="h-4 w-4" />
             <span>Upload JSON</span>
           </Button>
           <input

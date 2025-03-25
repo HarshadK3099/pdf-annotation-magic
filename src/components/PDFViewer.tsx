@@ -13,7 +13,6 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
   const [totalPages, setTotalPages] = useState(1);
   const [zoom, setZoom] = useState(100);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     if (pdfUrl) {
@@ -23,21 +22,28 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
     }
   }, [pdfUrl]);
 
+  // Setup text selection handling
   useEffect(() => {
-    // Set up global listener for text selection
+    // Store the pdfUrl globally so it can be accessed from PDFWorkspace
+    if (pdfUrl) {
+      window.selectedPdfUrl = pdfUrl;
+    }
+    
     const handleGlobalSelection = () => {
       const selection = window.getSelection();
       if (selection && selection.toString().trim() !== '') {
-        onTextSelect(selection.toString());
+        const selectedText = selection.toString();
+        onTextSelect(selectedText);
       }
     };
 
+    // Add event listener to document for text selection
     document.addEventListener('mouseup', handleGlobalSelection);
     
     return () => {
       document.removeEventListener('mouseup', handleGlobalSelection);
     };
-  }, [onTextSelect]);
+  }, [onTextSelect, pdfUrl]);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -133,7 +139,6 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
       </div>
 
       <div 
-        ref={containerRef}
         className="document-container flex-1 overflow-auto rounded-lg relative p-4"
       >
         {pdfUrl && (
@@ -157,5 +162,12 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ pdfUrl, onTextSelect }) => {
     </div>
   );
 };
+
+// Add global type for window to store the PDF URL
+declare global {
+  interface Window {
+    selectedPdfUrl?: string;
+  }
+}
 
 export default PDFViewer;

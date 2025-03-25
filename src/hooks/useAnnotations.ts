@@ -7,6 +7,7 @@ export interface Annotation {
   id: string;
   text: string;
   context: string;
+  pageNumber?: number;
 }
 
 export const useAnnotations = () => {
@@ -27,10 +28,12 @@ export const useAnnotations = () => {
     const newAnnotation: Annotation = {
       id: uuidv4(),
       text,
-      context
+      context,
+      pageNumber: 1 // Default to page 1 for now
     };
     setAnnotations([...annotations, newAnnotation]);
     setSelectedText('');
+    toast.success(`Annotation "${context}" added`);
   };
 
   // Handle deleting an annotation
