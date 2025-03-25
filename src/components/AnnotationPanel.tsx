@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tag, Search, Plus, Trash, Download, Save, Edit, X, Check } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -64,24 +63,20 @@ const AnnotationPanel: React.FC<AnnotationPanelProps> = ({
     toast.success('Annotation added');
   };
 
-  // Start editing an annotation
   const handleStartEdit = (id: string, currentContext: string) => {
     setEditingAnnotation(id);
     setEditText(currentContext);
   };
 
-  // Handle edit input change
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditText(e.target.value);
   };
 
-  // Cancel editing
   const handleCancelEdit = () => {
     setEditingAnnotation(null);
     setEditText('');
   };
 
-  // Save edited annotation name
   const handleSaveEdit = (id: string) => {
     onEditAnnotation(id, editText);
     setEditText('');
